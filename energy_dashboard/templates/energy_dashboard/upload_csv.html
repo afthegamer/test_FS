@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Importation de Données Énergétiques</title>
+</head>
+<body>
+    <h1>Importation de Données Énergétiques</h1>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Importer</button>
+    </form>
+    <h2>Données Importées</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>Région</th>
+                <th>Consommation (TWh)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in page_obj %}
+            <tr>
+                <td>{{ entry.date }}</td>
+                <td>{{ entry.region }}</td>
+                <td>{{ entry.consumption_twh }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; première</a>
+                <a href="?page={{ page_obj.previous_page_number }}">précédente</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">suivante</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">dernière &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+</body>
+</html>
