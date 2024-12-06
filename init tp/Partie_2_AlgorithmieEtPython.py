@@ -1,7 +1,11 @@
 import csv
 from typing import List
 
+from django.db.models.expressions import result
+
+
 def custom_sort_per_line(file_path: str) -> List[str]:
+    sorted_typologies_list = []
 
     # Read CSV file
     with open(file_path, newline='', encoding='utf-8-sig') as csvfile:
@@ -51,13 +55,15 @@ def custom_sort_per_line(file_path: str) -> List[str]:
                     typologies.sort(key=lambda x: (len(x), x))
 
                     # Print the sorted typologies for this line
-                    print(f"Typologies triées pour la ligne {index} :")
-                    for typology in typologies:
-                        print(typology)
-                    print()  # Empty line to separate lines
+                    #  print(f"Typologies triées pour la ligne {index} :")
+                    sorted_typologies_list.append(f"Ligne {index} : {', '.join(typologies)}")
+
+    return sorted_typologies_list
 
 # Example of use with CSV file
 try:
-    custom_sort_per_line('cnilViolation.csv')
+    result=custom_sort_per_line('cnilViolation.csv')
+    for line in result:
+        print(line) # Empty line to separate lines
 except KeyError as e:
     print(e)
